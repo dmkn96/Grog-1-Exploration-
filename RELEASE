@@ -1,0 +1,23 @@
+                         ╔══════════════════════════╗
+                         ║                 _______  ║
+                         ║            /\   |_   _|  ║
+                         ║  __  __   /  \    | |    ║
+                         ║  \ \/ /  / /\ \   | |    ║
+                         ║   >  <  / ____ \ _| |_   ║
+                         ║  /_/\_\/_/    \_\_____|  ║
+                         ║                          ║
+                         ║  Understand the Universe ║
+                         ║      [https://x.ai]      ║
+                         ╚════════════╗╔════════════╝
+                             ╔════════╝╚═════════╗
+                             ║ xAI Grok-1 (314B) ║
+                             ╚════════╗╔═════════╝
+                ╔═════════════════════╝╚═════════════════════╗
+                ║ 314B parameter Mixture of Experts model    ║
+                ║ - Base model (not finetuned)               ║
+                ║ - 8 experts (2 active)                     ║
+                ║ - 86B active parameters                    ║
+                ║ - Apache 2.0 license                       ║
+                ║ - Code: https://github.com/xai-org/grok-1  ║
+                ║ - Happy coding!                            ║
+                ╚════════════════════════════════════════════╝

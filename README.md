@@ -1,4 +1,5 @@
-Hello everyone.
+# Step 0 : Installation
+### Hello everyone.
 
 - [x] I placed the downloaded weights into the correct directory 
 `\checkpoints\ckpt-0`
@@ -45,3 +46,10 @@ def copy_from_shm(file: str):
         os.close(fd)
         os.remove(tmp_path)
 ```
+# Step 1 : Testing
+
+I launched the model and fixed all the bugs. <br>
+However, I can't fully run it on my machine. 😞<br><br>
+I've read forums where people mention the need for server-grade hardware.<br>
+At minimum, 100GB of RAM and 5 video cards with more than 8GB of memory each.<br><br>
+The best option would be to wait for a lighter version with fewer parameters. ⭐<br>

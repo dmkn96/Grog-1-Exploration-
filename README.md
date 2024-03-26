@@ -1,13 +1,14 @@
 # Step 0 : Installation
 ### Hello everyone.
 
-- [x] I placed the downloaded weights into the correct directory 
-`\checkpoints\ckpt-0`
-- [x] Changed the run(main_parameters) to circumvent the mesh issue:
-`ValueError: Number of devices 1 must equal the product of mesh_shape (1, 8)` -> changed (1, 8) -> (1, 1)
-- [x] Everything seemed fine, but then I encountered this error:
-FileNotFoundError: [Errno 2] No such file or directory: '/dev/shm/tmpva2uzbug'
-checkpoint.py ->
+- [x] I placed the downloaded weights into the correct directory.<br>
+`\checkpoints\ckpt-0` <br>
+- [x] Changed the run(main_parameters) to circumvent the mesh issue:<br>
+`ValueError: Number of devices 1 must equal the product of mesh_shape (1, 8)` <br>
+solution -> Change (1, 8) -> (1, 1)  `# If you have one GPU`<br>
+- [x] Everything seemed fine, but then I encountered this error:<br>
+`FileNotFoundError: [Errno 2] No such file or directory: '/dev/shm/tmpva2uzbug'` <br>
+solution -> Edit checkpoint.py -> <br>
 ```
 @contextlib.contextmanager
 def copy_to_shm(file: str):

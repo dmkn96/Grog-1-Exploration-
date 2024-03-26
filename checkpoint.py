@@ -41,31 +41,26 @@ sys.modules['__main__'].QuantizedWeight8bit = QuantizedWeight8bit
 
 @contextlib.contextmanager
 def copy_to_shm(file: str):
-    if file.startswith("/dev/shm/"):
-        # Nothing to do, the file is already in shared memory.
-        yield file
-        return
-
-    tmp_dir = "/dev/shm/"
+    tmp_dir = tempfile.gettempdir()
     fd, tmp_path = tempfile.mkstemp(dir=tmp_dir)
     try:
         shutil.copyfile(file, tmp_path)
         yield tmp_path
     finally:
-        os.remove(tmp_path)
         os.close(fd)
+        os.remove(tmp_path)
 
 
 @contextlib.contextmanager
 def copy_from_shm(file: str):
-    tmp_dir = "/dev/shm/"
+    tmp_dir = tempfile.gettempdir()
     fd, tmp_path = tempfile.mkstemp(dir=tmp_dir)
     try:
         yield tmp_path
         shutil.copyfile(tmp_path, file)
     finally:
-        os.remove(tmp_path)
         os.close(fd)
+        os.remove(tmp_path)
 
 
 def fast_unpickle(path: str) -> Any:
@@ -94,8 +89,8 @@ def load_tensors(shaped_arrays, directory, mesh_config, tensor_indices=None):
     for i, t in iterator:
         if (i % num_replicas) == ((jax.process_index() // data_model_shards) % num_replicas):
             idx = (
-                jax.process_index() // (num_replicas * data_model_shards) * data_model_shards
-                + jax.process_index() % data_model_shards
+                    jax.process_index() // (num_replicas * data_model_shards) * data_model_shards
+                    + jax.process_index() % data_model_shards
             )
             fs.append(
                 pool.submit(fast_unpickle, os.path.join(directory, f"tensor{i:05d}_{idx:03d}"))
@@ -120,9 +115,9 @@ def path_tuple_to_string(path: tuple) -> str:
 
 
 def get_load_path_str(
-    init_path_str: str,
-    load_rename_rules: Optional[list[tuple[str, str]]] = None,
-    load_exclude_rules: Optional[list[str]] = None,
+        init_path_str: str,
+        load_rename_rules: Optional[list[tuple[str, str]]] = None,
+        load_exclude_rules: Optional[list[str]] = None,
 ) -> Optional[str]:
     # Exclusion
     if load_exclude_rules is not None:
@@ -142,11 +137,11 @@ def get_load_path_str(
 
 
 def replace_with_load_state(
-    init_state: Any,
-    load_state: Any,
-    load_rename_rules: Optional[list[tuple[str, str]]] = None,
-    load_exclude_rules: Optional[list[str]] = None,
-    mesh_config: tuple = (1, 1),
+        init_state: Any,
+        load_state: Any,
+        load_rename_rules: Optional[list[tuple[str, str]]] = None,
+        load_exclude_rules: Optional[list[str]] = None,
+        mesh_config: tuple = (1, 1),
 ) -> Any:
     flatten_load, _ = jax.tree_util.tree_flatten_with_path(load_state)
     flatten_init, structure_init = jax.tree_util.tree_flatten_with_path(init_state)
@@ -178,13 +173,13 @@ def replace_with_load_state(
 
 
 def restore(
-    checkpoint_path: str,
-    state_shapes: Any,
-    mesh,
-    between_hosts_config,
-    params_only,
-    state_sharding,
-    init_state: Optional[Any] = None,
+        checkpoint_path: str,
+        state_shapes: Any,
+        mesh,
+        between_hosts_config,
+        params_only,
+        state_sharding,
+        init_state: Optional[Any] = None,
 ) -> Any:
     ckpt_path = os.path.join(checkpoint_path, "ckpt-0")
 

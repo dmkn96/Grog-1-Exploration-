@@ -5,22 +5,8 @@
 `\checkpoints\ckpt-0`
 - [x] Changed the run(main_parameters) to circumvent the mesh issue:
 `ValueError: Number of devices 1 must equal the product of mesh_shape (1, 8)` -> changed (1, 8) -> (1, 1)
-- [ ] Everything seemed fine, but then I encountered this error:
+- [x] Everything seemed fine, but then I encountered this error:
 FileNotFoundError: [Errno 2] No such file or directory: '/dev/shm/tmpva2uzbug'
-
-I will attempt to resolve this issue myself, but if anyone 
-has already found a solution, please share it ❤️. 
-
-Here is my PC configuration:
-> Processor: 13th Gen Intel(R) Core(TM) i9-13900K (32 CPUs), ~3.0GHz
-> Memory: 65536MB RAM
-> Operating System: Windows 11 Pro 64-bit (10.0, Build 22631) (22621.ni_release.220506-1250)
-> Card name: NVIDIA GeForce RTX 4080
-
-Found the solution in other topics,
-
-Everything works well if you apply this code:
-
 checkpoint.py ->
 ```
 @contextlib.contextmanager
@@ -46,6 +32,12 @@ def copy_from_shm(file: str):
         os.close(fd)
         os.remove(tmp_path)
 ```
+
+Here is my PC configuration:
+> Processor: 13th Gen Intel(R) Core(TM) i9-13900K (32 CPUs), ~3.0GHz
+> Memory: 65536MB RAM
+> Operating System: Windows 11 Pro 64-bit (10.0, Build 22631) (22621.ni_release.220506-1250)
+> Card name: NVIDIA GeForce RTX 4080
 # Step 1 : Testing
 
 I launched the model and fixed all the bugs. <br>

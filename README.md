@@ -36,9 +36,9 @@ def copy_from_shm(file: str):
 
 **Here is my PC configuration: <br>**
 > Processor: 13th Gen Intel(R) Core(TM) i9-13900K (32 CPUs), ~3.0GHz <br>
-> Memory: 65536MB RAM <br>
 > Operating System: Windows 11 Pro 64-bit (10.0, Build 22631) <br>
 > Card name: NVIDIA GeForce RTX 4080 <br>
+> Memory: 65536MB RAM <br>
 # Step 1 : Testing 
 I launched the model and fixed all the bugs. <br>
 However, I can't fully run it on my machine. 😞<br><br>

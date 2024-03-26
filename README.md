@@ -1,56 +1,47 @@
-# Grok-1
+# Step 0 : Installation
+### Hello everyone.
 
-This repository contains JAX example code for loading and running the Grok-1 open-weights model.
+- [x] I placed the downloaded weights into the correct directory.<br>
+`\checkpoints\ckpt-0` <br>
+- [x] Changed the run(main_parameters) to circumvent the mesh issue:<br>
+`ValueError: Number of devices 1 must equal the product of mesh_shape (1, 8)` <br>
+solution -> Change (1, 8) -> (1, 1)  `# If you have one GPU`<br>
+- [x] Everything seemed fine, but then I encountered this error:<br>
+`FileNotFoundError: [Errno 2] No such file or directory: '/dev/shm/tmpva2uzbug'` <br>
+solution -> Edit checkpoint.py -> <br>
+```
+@contextlib.contextmanager
+def copy_to_shm(file: str):
+    tmp_dir = tempfile.gettempdir()
+    fd, tmp_path = tempfile.mkstemp(dir=tmp_dir)
+    try:
+        shutil.copyfile(file, tmp_path)
+        yield tmp_path
+    finally:
+        os.close(fd)
+        os.remove(tmp_path)
 
-Make sure to download the checkpoint and place the `ckpt-0` directory in `checkpoints` - see [Downloading the weights](#downloading-the-weights)
 
-Then, run
-
-```shell
-pip install -r requirements.txt
-python run.py
+@contextlib.contextmanager
+def copy_from_shm(file: str):
+    tmp_dir = tempfile.gettempdir()
+    fd, tmp_path = tempfile.mkstemp(dir=tmp_dir)
+    try:
+        yield tmp_path
+        shutil.copyfile(tmp_path, file)
+    finally:
+        os.close(fd)
+        os.remove(tmp_path)
 ```
 
-to test the code.
-
-The script loads the checkpoint and samples from the model on a test input.
-
-Due to the large size of the model (314B parameters), a machine with enough GPU memory is required to test the model with the example code.
-The implementation of the MoE layer in this repository is not efficient. The implementation was chosen to avoid the need for custom kernels to validate the correctness of the model.
-
-# Model Specifications
-
-Grok-1 is currently designed with the following specifications:
-
-- **Parameters:** 314B
-- **Architecture:** Mixture of 8 Experts (MoE)
-- **Experts Utilization:** 2 experts used per token
-- **Layers:** 64
-- **Attention Heads:** 48 for queries, 8 for keys/values
-- **Embedding Size:** 6,144
-- **Tokenization:** SentencePiece tokenizer with 131,072 tokens
-- **Additional Features:**
-  - Rotary embeddings (RoPE)
-  - Supports activation sharding and 8-bit quantization
-- **Maximum Sequence Length (context):** 8,192 tokens
-
-# Downloading the weights
-
-You can download the weights using a torrent client and this magnet link:
-
-```
-magnet:?xt=urn:btih:5f96d43576e3d386c9ba65b883210a393b68210e&tr=https%3A%2F%2Facademictorrents.com%2Fannounce.php&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
-```
-
-or directly using [HuggingFace 🤗 Hub](https://huggingface.co/xai-org/grok-1):
-```
-git clone https://github.com/xai-org/grok-1.git && cd grok-1
-pip install huggingface_hub[hf_transfer]
-huggingface-cli download xai-org/grok-1 --repo-type model --include ckpt-0/* --local-dir checkpoints --local-dir-use-symlinks False
-```
-
-# License
-
-The code and associated Grok-1 weights in this release are licensed under the
-Apache 2.0 license. The license only applies to the source files in this
-repository and the model weights of Grok-1.
+**Here is my PC configuration: <br>**
+> Processor: 13th Gen Intel(R) Core(TM) i9-13900K (32 CPUs), ~3.0GHz <br>
+> Memory: 65536MB RAM <br>
+> Operating System: Windows 11 Pro 64-bit (10.0, Build 22631)
+> Card name: NVIDIA GeForce RTX 4080 <br>
+# Step 1 : Testing 
+I launched the model and fixed all the bugs. <br>
+However, I can't fully run it on my machine. 😞<br><br>
+I've read forums where people mention the need for server-grade hardware.<br>
+At minimum, 100GB of RAM and 5 video cards with more than 8GB of memory each.<br><br>
+The best option would be to wait for a lighter version with fewer parameters. ⭐<br>
